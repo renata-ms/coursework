@@ -1,0 +1,52 @@
+{% load staticfiles %}
+<!DOCTYPE>
+<html>
+	<head>
+		<title>{{ poll.question }}</title>
+		<meta charset="utf-8" />
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+		<script src="http://code.highcharts.com/highcharts.js"></script>
+		<script>
+		$(function () {
+			$('#container').highcharts({
+				chart: {
+					plotBackgroundColor: null,
+					plotBorderWidth: null,
+					plotShadow: false
+				},
+				title: {
+					text: 'Browser market shares at a specific website, 2010'
+				},
+				tooltip: {
+					pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+				},
+				plotOptions: {
+					pie: {
+						allowPointSelect: true,
+						cursor: 'pointer',
+						dataLabels: {
+							enabled: true,
+							color: '#000000',
+							connectorColor: '#000000',
+							format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+						}
+					}
+				},
+				series: [{
+					type: 'pie',
+					name: 'Browser share',
+					data: [
+					{% for choice in poll.choice_set.all %}
+						['{{ choice.choice }}',   {{ choice.votes }}],
+					{% endfor %}
+					]
+				}]
+			});
+		});
+		</script>
+	</head>
+	<body>
+		<div id="container" style="width:100%; height:400px;"></div>
+		<a href="/{{ poll.id }}">Go to poll</a>
+	</body>
+</html>

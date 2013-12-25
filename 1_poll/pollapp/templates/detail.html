@@ -1,0 +1,23 @@
+<!DOCTYPE>
+<html>
+	<head>
+		<title>{{ poll.question }}</title>
+		<meta charset="utf-8" />
+	</head>
+	<body>
+		<h1>{{ poll.question }}</h1>
+
+		{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+		<form action="/{{ poll.id }}/vote/" method="post">
+		{% for choice in poll.choice_set.all %}
+			<input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}" />
+			<label for="choice{{ forloop.counter }}">{{ choice.choice }}</label><br />
+		{% endfor %}
+		<input type="submit" value="Vote" />
+		</form>
+		
+		<a href="/">Go to PollList</a><br>
+		<a href="/{{ poll.id }}/results">Go to poll results</a>
+	</body>
+</html>
